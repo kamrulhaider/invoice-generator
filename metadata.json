@@ -1,0 +1,5 @@
+{
+  "name": "InvoiceGenius AI",
+  "description": "A professional invoice generator featuring AI-powered item extraction from natural text, customizable branding, and instant PDF export.",
+  "requestFramePermissions": []
+}
