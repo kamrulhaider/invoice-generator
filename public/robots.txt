@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://invoicegenius.makeupcoders.com/sitemap.xml
