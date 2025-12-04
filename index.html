@@ -2,16 +2,64 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="https://picsum.photos/32/32" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Free invoice generator to create professional invoices online. AI-assisted editing, customizable fields, instant PDF download, and print-ready preview with InvoiceGenius AI."
+    />
+    <link rel="canonical" href="https://invoicegenius.makeupcoders.com/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://invoicegenius.makeupcoders.com/" />
+    <meta property="og:site_name" content="InvoiceGenius AI" />
+    <meta
+      property="og:title"
+      content="InvoiceGenius AI — Free Invoice Generator"
+    />
+    <meta
+      property="og:description"
+      content="Free invoice generator to create professional invoices online. AI-assisted editing, customizable fields, instant PDF download, and print-ready preview."
+    />
+    <meta property="og:locale" content="en_US" />
+    <!-- Replace with your final social image when ready -->
+    <meta
+      property="og:image"
+      content="https://invoicegenius.makeupcoders.com/og-image.png"
+    />
+    <meta
+      property="og:image:alt"
+      content="Generate professional invoices instantly with InvoiceGenius AI"
+    />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@makeupcoders" />
+    <meta
+      name="twitter:title"
+      content="InvoiceGenius AI — Free Invoice Generator"
+    />
+    <meta
+      name="twitter:description"
+      content="Create professional invoices online for free. AI-assisted editing, customizable fields, instant PDF download, and print-ready preview."
+    />
+    <!-- Replace with your final social image when ready -->
+    <meta
+      name="twitter:image"
+      content="https://invoicegenius.makeupcoders.com/og-image.png"
+    />
     <title>InvoiceGenius AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       body {
-        font-family: 'Inter', sans-serif;
+        font-family: "Inter", sans-serif;
       }
       /* Hide scrollbar for cleaner UI in some panels */
       .no-scrollbar::-webkit-scrollbar {
@@ -22,24 +70,24 @@
         scrollbar-width: none;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "uuid": "https://aistudiocdn.com/uuid@^13.0.0",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
-    "jspdf": "https://aistudiocdn.com/jspdf@^3.0.4",
-    "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
-</head>
+    <script type="importmap">
+      {
+        "imports": {
+          "uuid": "https://aistudiocdn.com/uuid@^13.0.0",
+          "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+          "react/": "https://aistudiocdn.com/react@^19.2.0/",
+          "react": "https://aistudiocdn.com/react@^19.2.0",
+          "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+          "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+          "jspdf": "https://aistudiocdn.com/jspdf@^3.0.4",
+          "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1"
+        }
+      }
+    </script>
+    <link rel="stylesheet" href="/index.css" />
+  </head>
   <body class="bg-slate-50 text-slate-900 antialiased">
     <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
-</body>
+    <script type="module" src="/index.tsx"></script>
+  </body>
 </html>
