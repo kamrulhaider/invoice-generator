@@ -48,11 +48,14 @@ const App: React.FC = () => {
 
     setIsGenerating(true);
     try {
+      // Force desktop layout for consistent PDF regardless of device
+      previewRef.current.classList.add("pdf-mode");
       // Increase scale for better resolution
       const canvas = await html2canvas(previewRef.current, {
         scale: 2,
         logging: false,
         useCORS: true, // For images
+        backgroundColor: "#ffffff",
       });
 
       const imgData = canvas.toDataURL("image/png");
@@ -61,16 +64,34 @@ const App: React.FC = () => {
         unit: "mm",
         format: "a4",
       });
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 15; // mm
+      const contentWidth = pageWidth - margin * 2;
+      const contentHeight = pageHeight - margin * 2;
 
-      const imgWidth = 210; // A4 width in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const imgAspect = canvas.width / canvas.height;
+      const targetWidth = contentWidth;
+      const targetHeight = contentHeight;
+      let drawWidth = targetWidth;
+      let drawHeight = drawWidth / imgAspect;
+      if (drawHeight > targetHeight) {
+        drawHeight = targetHeight;
+        drawWidth = drawHeight * imgAspect;
+      }
+      const x = margin + (contentWidth - drawWidth) / 2;
+      const y = margin + (contentHeight - drawHeight) / 2;
 
-      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+      pdf.addImage(imgData, "PNG", x, y, drawWidth, drawHeight);
       pdf.save(`invoice-${data.invoiceNumber || "draft"}.pdf`);
     } catch (err) {
       console.error("PDF generation failed", err);
       alert("Failed to generate PDF. Please try again.");
     } finally {
+      // Revert forced layout
+      if (previewRef.current) {
+        previewRef.current.classList.remove("pdf-mode");
+      }
       setIsGenerating(false);
     }
   };
@@ -80,7 +101,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col">
+    <div className="min-h-screen bg-slate-100 flex flex-col overflow-x-hidden">
       {/* Navbar */}
       <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-[1600px] mx-auto px-4 h-16 flex items-center justify-between">
@@ -88,12 +109,26 @@ const App: React.FC = () => {
             <div className="bg-indigo-600 p-1.5 rounded-lg">
               <FileText className="w-5 h-5 text-white" />
             </div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
+            <h1 className="hidden md:block text-base md:text-lg font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
               InvoiceGenius AI
             </h1>
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Brand/Marketing */}
+            <a
+              href="https://makeupcoders.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:flex items-center gap-2 text-slate-600 hover:text-slate-800"
+            >
+              <img
+                src="/makeup-coders-logo.png"
+                alt="Makeup Coders"
+                className="h-5 w-auto object-contain"
+              />
+              <span className="text-sm">by makeupcoders.com</span>
+            </a>
             {/* Mobile Tab Toggles */}
             <div className="flex lg:hidden bg-slate-100 p-1 rounded-lg mr-2">
               <button
@@ -162,7 +197,7 @@ const App: React.FC = () => {
             activeTab === "preview" ? "block" : "hidden lg:block"
           }`}
         >
-          <div className="sticky top-28 print:static">
+          <div className="lg:sticky lg:top-28 print:static">
             {/* The actual component we convert to PDF */}
             <div className="shadow-2xl rounded-sm overflow-hidden bg-white">
               <InvoicePreview
@@ -202,15 +237,31 @@ const App: React.FC = () => {
         </div>
       </footer>
 
-      {/* Print Styles */}
+      {/* PDF/Print Styles */}
       <style>{`
+        /* Force desktop layout when generating PDF */
+        /* Approx A4-friendly capture width at typical CSS pixel density */
+        .pdf-mode { width: 794px !important; }
+        .pdf-mode .mobile-only { display: none !important; }
+        .pdf-mode .desktop-only { display: block !important; }
+        /* Restore roomy table rows for PDF */
+        .pdf-mode .tight-rows th { padding-top: 12px !important; padding-bottom: 12px !important; }
+        .pdf-mode .tight-rows td { padding-top: 16px !important; padding-bottom: 16px !important; }
+        /* Force header to desktop layout regardless of breakpoint */
+        #invoice-preview.pdf-mode .force-desktop-row { display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: flex-start !important; gap: 24px !important; }
+        #invoice-preview.pdf-mode .force-desktop-text-right { text-align: right !important; }
+        #invoice-preview.pdf-mode .totals-panel { width: 40% !important; margin-left: auto !important; }
+
         @media print {
-          @page { margin: 0; }
+          @page { margin: 15mm; }
           body { background: white; }
           nav, button, .hidden-print { display: none !important; }
           #root > div { min-height: auto; }
           main { padding: 0; margin: 0; max-width: none; display: block; }
           #invoice-preview { box-shadow: none; margin: 0; width: 100%; max-width: none; }
+          /* Ensure desktop table prints */
+          #invoice-preview .mobile-only { display: none !important; }
+          #invoice-preview .desktop-only { display: block !important; }
           /* Hide editor */
           main > div:first-child { display: none; } 
           /* Show preview */
