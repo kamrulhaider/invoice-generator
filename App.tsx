@@ -1,4 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import InvoiceEditor from "./components/InvoiceEditor";
 import InvoicePreview from "./components/InvoicePreview";
 import { InvoiceData, Currencies } from "./types";
@@ -36,6 +38,17 @@ const initialState: InvoiceData = {
 };
 
 const App: React.FC = () => {
+  const [route, setRoute] = useState<string>(window.location.pathname || "/");
+  useEffect(() => {
+    const onPop = () => setRoute(window.location.pathname || "/");
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+  const navigate = (path: string) => {
+    if (path === route) return;
+    window.history.pushState({}, "", path);
+    setRoute(path);
+  };
   const [data, setData] = useState<InvoiceData>(initialState);
   const [isGenerating, setIsGenerating] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
@@ -99,6 +112,11 @@ const App: React.FC = () => {
   const handlePrint = () => {
     window.print();
   };
+
+  const isLegalRoute = useMemo(
+    () => route.startsWith("/privacy") || route.startsWith("/terms"),
+    [route]
+  );
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col overflow-x-hidden">
@@ -181,42 +199,52 @@ const App: React.FC = () => {
       </nav>
 
       {/* Main Content */}
-      <main className="flex-1 max-w-[1600px] mx-auto w-full p-4 md:p-6 lg:p-8 flex gap-8 items-start">
-        {/* Editor Column */}
-        <div
-          className={`flex-1 w-full lg:max-w-xl bg-white rounded-xl shadow-sm border border-slate-200 lg:block ${
-            activeTab === "editor" ? "block" : "hidden"
-          }`}
-        >
-          <InvoiceEditor data={data} onChange={setData} />
-        </div>
-
-        {/* Preview Column */}
-        <div
-          className={`flex-1 w-full flex justify-center lg:block ${
-            activeTab === "preview" ? "block" : "hidden lg:block"
-          }`}
-        >
-          <div className="lg:sticky lg:top-28 print:static">
-            {/* The actual component we convert to PDF */}
-            <div className="shadow-2xl rounded-sm overflow-hidden bg-white">
-              <InvoicePreview
-                ref={previewRef}
-                data={data}
-                currencySymbol={data.currency}
-              />
+      <main className="flex-1 max-w-[1600px] mx-auto w-full p-4 md:p-6 lg:p-8">
+        {isLegalRoute ? (
+          route.startsWith("/privacy") ? (
+            <Privacy />
+          ) : (
+            <Terms />
+          )
+        ) : (
+          <div className="flex gap-8 items-start">
+            {/* Editor Column */}
+            <div
+              className={`flex-1 w-full lg:max-w-xl bg-white rounded-xl shadow-sm border border-slate-200 lg:block ${
+                activeTab === "editor" ? "block" : "hidden"
+              }`}
+            >
+              <InvoiceEditor data={data} onChange={setData} />
             </div>
 
-            <p className="text-center text-slate-400 text-xs mt-4 lg:hidden">
-              Switch to Edit tab to make changes
-            </p>
+            {/* Preview Column */}
+            <div
+              className={`flex-1 w-full flex justify-center lg:block ${
+                activeTab === "preview" ? "block" : "hidden lg:block"
+              }`}
+            >
+              <div className="lg:sticky lg:top-28 print:static">
+                {/* The actual component we convert to PDF */}
+                <div className="shadow-2xl rounded-sm overflow-hidden bg-white">
+                  <InvoicePreview
+                    ref={previewRef}
+                    data={data}
+                    currencySymbol={data.currency}
+                  />
+                </div>
+
+                <p className="text-center text-slate-400 text-xs mt-4 lg:hidden">
+                  Switch to Edit tab to make changes
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </main>
 
       {/* Footer */}
       <footer className="hidden-print bg-white border-t border-slate-200">
-        <div className="max-w-[1600px] mx-auto px-4 py-4 flex items-center justify-center gap-3 text-sm text-slate-600">
+        <div className="max-w-[1600px] mx-auto px-4 py-4 flex items-center justify-center gap-6 text-sm text-slate-600">
           <img
             src="/makeup-coders-logo.png"
             alt="Makeup Coders logo"
@@ -234,6 +262,27 @@ const App: React.FC = () => {
               makeupcoders.com
             </a>
           </span>
+          <span className="text-slate-300">|</span>
+          <a
+            href="/privacy"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/privacy");
+            }}
+            className="text-slate-600 hover:text-slate-900 underline underline-offset-2"
+          >
+            Privacy
+          </a>
+          <a
+            href="/terms"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/terms");
+            }}
+            className="text-slate-600 hover:text-slate-900 underline underline-offset-2"
+          >
+            Terms
+          </a>
         </div>
       </footer>
 
