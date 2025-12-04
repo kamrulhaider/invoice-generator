@@ -9,6 +9,8 @@
       content="Free invoice generator to create professional invoices online. AI-assisted editing, customizable fields, instant PDF download, and print-ready preview with InvoiceGenius AI."
     />
     <link rel="canonical" href="https://invoicegenius.makeupcoders.com/" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#ffffff" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -24,10 +26,10 @@
     />
     <meta property="og:locale" content="en_US" />
     <!-- Replace with your final social image when ready -->
-    <meta
-      property="og:image"
-      content="https://invoicegenius.makeupcoders.com/og-image.png"
-    />
+    <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
       content="Generate professional invoices instantly with InvoiceGenius AI"
@@ -36,6 +38,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@makeupcoders" />
+    <meta name="twitter:creator" content="@makeupcoders" />
     <meta
       name="twitter:title"
       content="InvoiceGenius AI — Free Invoice Generator"
@@ -45,10 +48,32 @@
       content="Create professional invoices online for free. AI-assisted editing, customizable fields, instant PDF download, and print-ready preview."
     />
     <!-- Replace with your final social image when ready -->
-    <meta
-      name="twitter:image"
-      content="https://invoicegenius.makeupcoders.com/og-image.png"
-    />
+    <meta name="twitter:image" content="/og-image.jpg" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "InvoiceGenius AI",
+        "url": "https://invoicegenius.makeupcoders.com/",
+        "description": "Free invoice generator to create professional invoices online. AI-assisted editing, customizable fields, instant PDF download, and print-ready preview.",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Makeup Coders",
+          "url": "https://makeupcoders.com",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "/makeup-coders-logo.png"
+          }
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://invoicegenius.makeupcoders.com/?q={search_term}",
+          "query-input": "required name=search_term"
+        }
+      }
+    </script>
     <title>InvoiceGenius AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
